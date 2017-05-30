@@ -5,7 +5,7 @@ Android ndk的一个简单的例子
 
 ### 使用步骤
 
-1. ##### 搭建ndk环境
+1. #### 搭建ndk环境
 
 
 
@@ -17,7 +17,7 @@ Android ndk的一个简单的例子
 
    `javah -classpath . -jni -d jni com.example.chengzj.ndk.simple.Java2CJNI`
 
-4. ##### 创建实现头文件的.c源文件，并实现头文件的本地方法
+4. #### 创建实现头文件的.c源文件，并实现头文件的本地方法
 
    ##### 
 
