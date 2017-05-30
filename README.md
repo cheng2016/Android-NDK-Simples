@@ -9,11 +9,11 @@ Android ndk的一个简单的例子
 
 
 
-2. ##### 创建jni调用类，定义本地方法
+2. #### 创建jni调用类，定义本地方法
 
 
 
-3. ##### 通过javah命令获取jni调用类头文件
+3. #### 通过javah命令获取jni调用类头文件
 
    `javah -classpath . -jni -d jni com.example.chengzj.ndk.simple.Java2CJNI`
 
@@ -21,12 +21,12 @@ Android ndk的一个简单的例子
 
    ##### 
 
-5. ##### 配置并生成so文件
+5. #### 配置并生成so文件
 
 
 
-6. ##### 加载so库
+6. #### 加载so库
 
 
 
-7. ##### 执行调用本地方法
+7. #### 执行调用本地方法
