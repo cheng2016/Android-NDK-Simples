@@ -75,3 +75,9 @@ Android ndk的一个简单的例子
    Toast.makeText(MainActivity.this,result,Toast.LENGTH_LONG).show();
    ```
 
+
+
+
+### 效果图
+
+![](screenshort/device-2017-05-31-021110.png)
