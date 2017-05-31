@@ -47,9 +47,9 @@ Android ndk的一个简单的例子
    >
    > ​	LOCAL_MODULE    := Java2C                                      //这个模块的名字，最后生成的.so的名字就是它
    >
-   > ​	LOCAL_SRC_FILES := Java2C.so                                  //这里是要编译的文件
+   > ​	LOCAL_SRC_FILES := Java2C.c 	                                 //这里是要编译的文件
    >
-   > ​	include $(PREBUILT_SHARED_LIBRARY)                   //SHARED_LIBRARY就是动态库，即.so文件
+   > ​	include $(BUILD_SHARED_LIBRARY)  	                 //SHARED_LIBRARY就是动态库，即.so文件
 
 6. #### 配置并生成so文件
 
