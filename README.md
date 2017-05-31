@@ -53,6 +53,8 @@ Android ndk的一个简单的例子
 
 6. #### 配置并生成so文件
 
+   在项目的工具类中选择Build->Rebuild Project，进行重新编译工程，然后AS会为我们生成so文件，so文件所在目录为：app\build\intermediates\ndk\debug\lib下
+
    ```
    ndk {
        moduleName "Java2C" //so文件名
