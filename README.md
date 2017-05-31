@@ -83,3 +83,19 @@ Android ndk的一个简单的例子
 ### 效果图
 
 ![](screenshort/device-2017-05-31-021110.png)
+
+
+
+### 参考
+
+[Android NDK开发之从环境搭建到demo十步流](http://www.apkbus.com/blog-866962-63617.html)
+
+[android studio 编译C生成.so文件](http://www.2cto.com/kf/201607/526887.html)
+
+
+
+### Contact Me
+
+- Github: github.com/cheng2016
+- Email: mitnick.cheng@outlook.com
+- QQ: 1102743539
