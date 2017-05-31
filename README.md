@@ -92,6 +92,8 @@ Android ndk的一个简单的例子
 
 [android studio 编译C生成.so文件](http://www.2cto.com/kf/201607/526887.html)
 
+[在Android Studio中添加libs](http://blog.csdn.net/a34927341/article/details/52932050)
+
 
 
 ### Contact Me
