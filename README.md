@@ -102,7 +102,7 @@ Android ndk的一个简单的例子
 - Email: mitnick.cheng@outlook.com
 - QQ: 1102743539
 
-# License
+## License
 
     Copyright 2016 cheng2016,Inc.
 
