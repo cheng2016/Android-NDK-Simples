@@ -1,5 +1,6 @@
 # Android-NDK-Simples
-Android ndk的一个简单的例子
+
+Android ndk的一个简单的例子，使用Jni进行Java和C的交互，带你进入Android底层编程世界
 
 
 
