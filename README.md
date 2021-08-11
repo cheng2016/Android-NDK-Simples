@@ -94,6 +94,10 @@ Android NDK的一个简单的例子，使用JNI进行Java和C的交互，带你�
 [在Android Studio中添加libs](http://blog.csdn.net/a34927341/article/details/52932050)
 
 
+### 推荐
+
+[ImageDownLoader 手写的三级缓存框架二百多行代码搞定图片缓存](https://github.com/cheng2016/AndroidUtil/blob/master/util/ImageDownLoader.java)
+
 
 ### Contact Me
 
