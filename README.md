@@ -104,6 +104,7 @@ Android NDK的一个简单的例子，使用JNI进行Java和C的交互，带你�
 - Github: github.com/cheng2016
 - Email: mitnick.cheng@outlook.com
 - QQ: 1102743539
+- [CSDN: souls0808](https://blog.csdn.net/chengzhenjia?type=blog)
 
 ## License
 
