@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NDK Simples</string>
-    <string name="subtitle">点选示例，学习 JNI / NDK 核心 API</string>
+    <string name="subtitle">每个示例都有配图：看用途、看场景，点一下就能跑</string>
     <string name="result_label">运行结果</string>
+    <string name="demo_icon_desc">示例示意图</string>
 </resources>
