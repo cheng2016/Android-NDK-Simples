@@ -1,123 +1,122 @@
-# Android-NDK-Simples
+# Android NDK Simples
 
-Android NDK的一个简单的例子，使用JNI进行Java和C的交互，带你进入Android底层编程世界
+现代化的 Android NDK / JNI 学习示例：从「Hello Native」到线程回调、`RegisterNatives`、DirectByteBuffer 等核心知识点，点一下就能跑。
 
-### 使用步骤
+> 原项目（2017）已全面升级：AGP 8.5 + CMake + AndroidX，去掉无关 BottomNavigation，改成可点选的 Demo 列表。
 
-1. #### 搭建ndk环境
+## 环境要求
 
+- Android Studio Hedgehog 或更新版本
+- JDK 17
+- NDK + CMake（SDK Manager 中安装）
+- 建议 NDK r25+ / CMake 3.22.1
 
+## 快速开始
 
-2. #### 创建jni调用类，定义本地方法
+1. 用 Android Studio 打开本仓库根目录
+2. 等待 Gradle Sync（首次会下载依赖与 NDK 组件）
+3. 连接设备或启动模拟器，Run `app`
+4. 在列表中点任意示例，底部面板查看 native 返回结果
 
-   ```
-   public class Java2CJNI {
-       
-       public native String java2C();
-       
-   }
-   ```
+命令行（需本机已配置好 wrapper / SDK）：
 
+```bash
+./gradlew :app:assembleDebug
+```
 
+## 示例一览（17 个）
 
-3. #### 通过javah命令获取jni调用类头文件
+| # | 主题 | 你能学到 |
+|---|------|----------|
+| 1 | Hello from Native | `System.loadLibrary`、`NewStringUTF` |
+| 2 | 基本类型加法 | JNI 基本类型（`jint` 等） |
+| 3 | 字符串往返 | `GetStringUTFChars` / `ReleaseStringUTFChars` |
+| 4 | int[] 求和 | `GetIntArrayElements`、`JNI_ABORT` |
+| 5 | 原地反转 byte[] | 修改同一块 Java 数组（commit mode=0） |
+| 6 | XOR 加密 byte[] | `NewByteArray` / `SetByteArrayRegion` |
+| 7 | 读取 Java 对象字段 | `GetFieldID`、`GetObjectField` |
+| 8 | Native 创建 Java 对象 | `NewObject`、GlobalRef 缓存 |
+| 9 | C++ 回调 Java | `CallVoidMethod` + 接口 |
+| 10 | Native 抛异常 | `ThrowNew` → Java `catch` |
+| 11 | 静态 native | `jclass` 与 `jobject` 区别 |
+| 12 | ABI / 编译信息 | 架构宏、`__ANDROID_API__` |
+| 13 | 字符串 UTF 探测 | `GetStringLength` vs `GetStringUTFLength` |
+| 14 | Java vs Native 循环 | JNI 调用开销与 native 算力权衡 |
+| 15 | Native 线程回调 | `pthread` + `AttachCurrentThread` + GlobalRef |
+| 16 | DirectByteBuffer | `GetDirectBufferAddress` 零拷贝 |
+| 17 | RegisterNatives | `JNI_OnLoad` 动态注册，无需 `Java_` 符号名 |
 
-   > 在项目根目录下，进入main->java目录，全选文件目录栏，直接输入cmd命令并按回车键进入docs命令
+## 工程结构
 
-   `javah -classpath . -jni -d jni com.example.chengzj.ndk.simple.Java2CJNI`
+```
+app/src/main/
+├── cpp/
+│   ├── CMakeLists.txt          # CMake 构建 libndk_demo.so
+│   ├── native_bridge.cpp       # 全部 JNI 实现
+│   └── jni_helpers.cpp/.h      # 日志、字符串工具、jclass 缓存
+├── java/.../ndk/simple/
+│   ├── MainActivity.java       # Demo 列表 UI
+│   ├── NativeBridge.java       # native 方法声明
+│   ├── NativeCallback.java     # 供 C++ 回调的接口
+│   ├── DemoAdapter.java
+│   └── model/Person.java       # 字段访问 / NewObject 演示
+└── res/layout/
+    ├── activity_main.xml
+    └── item_demo.xml
+```
 
-4. #### 创建实现头文件的.c源文件，并实现头文件的本地方法
+## 关键知识点速记
 
-   ```
-   #include "com_example_chengzj_ndk_simple_Java2CJNI.h"
+### 1. 加载 so
 
-   JNIEXPORT jstring JNICALL
-    Java_com_example_chengzj_ndk_simple_Java2CJNI_java2C
-           (JNIEnv *env, jobject jobj){
-       return (*env)->NewStringUTF(env,"i am from native C.");
-   }
-   ```
+```java
+static {
+    System.loadLibrary("ndk_demo"); // 对应 libndk_demo.so
+}
+```
 
-5. #### 在jni目录下创建Android.mk文件，写入以下内容
+### 2. CMake 片段
 
-   > ​	LOCAL_PATH := $(call my-dir)                                      //固定写法，把路径赋给LOCAL_PATH变量
-   >
-   > ​	include $(CLEAR_VARS)                                                //清除其他LOCAL变量
-   >
-   > ​	LOCAL_MODULE    := Java2C                                      //这个模块的名字，最后生成的.so的名字就是它
-   >
-   > ​	LOCAL_SRC_FILES := Java2C.c 	                                 //这里是要编译的文件
-   >
-   > ​	include $(BUILD_SHARED_LIBRARY)  	                 //SHARED_LIBRARY就是动态库，即.so文件
+```cmake
+add_library(ndk_demo SHARED native_bridge.cpp jni_helpers.cpp)
+target_link_libraries(ndk_demo log android)
+```
 
-6. #### 配置并生成so文件
+`app/build.gradle` 中通过 `externalNativeBuild { cmake { ... } }` 接入。
 
-   在项目的工具类中选择Build->Rebuild Project，进行重新编译工程，然后AS会为我们生成so文件，so文件所在目录为：app\build\intermediates\ndk\debug\lib下
+### 3. 静态注册 vs 动态注册
 
-   ```
-   ndk {
-       moduleName "Java2C" //so文件名
-       abiFilters "armeabi", "armeabi-v7a", "x86" //CPU类型
-   }
-   ```
+- **静态**：方法名必须匹配 `Java_包名_类名_方法名`
+- **动态**：在 `JNI_OnLoad` 里 `RegisterNatives`，符号名可自定义（见示例 17）
 
-7. #### 加载so库
+### 4. 跨线程回调注意点
 
-   ```
-   static {
-       System.loadLibrary("Java2C");
-   }
-   ```
+1. `NewGlobalRef` 持有 callback，避免局部引用失效  
+2. 工作线程 `AttachCurrentThread` 拿到 `JNIEnv*`  
+3. 回调结束后 `DeleteGlobalRef` + `DetachCurrentThread`  
+4. UI 更新仍需切回主线程（本 Demo 用 `runOnUiThread`）
 
-8. #### 执行调用本地方法
+### 5. ABI
 
-   ```
-   String result = new Java2CJNI().java2C();
-   Toast.makeText(MainActivity.this,result,Toast.LENGTH_LONG).show();
-   ```
+当前默认打包：`armeabi-v7a`、`arm64-v8a`、`x86`、`x86_64`。真机发布可只保留 ARM：
 
+```gradle
+ndk {
+    abiFilters "armeabi-v7a", "arm64-v8a"
+}
+```
 
+## 相对旧版的升级
 
-
-### 效果图
-
-![](screenshort/device-2017-05-31-021110.png)
-
-
-
-### 参考
-
-[Android NDK开发之从环境搭建到demo十步流](http://www.apkbus.com/blog-866962-63617.html)
-
-[android studio 编译C生成.so文件](http://www.2cto.com/kf/201607/526887.html)
-
-[在Android Studio中添加libs](http://blog.csdn.net/a34927341/article/details/52932050)
-
-
-### 推荐
-
-[ImageDownLoader 手写的三级缓存框架二百多行代码搞定图片缓存](https://github.com/cheng2016/AndroidUtil/blob/master/util/ImageDownLoader.java)
-
-
-### Contact Me
-
-- Github: github.com/cheng2016
-- Email: mitnick.cheng@outlook.com
-- QQ: 1102743539
-- [CSDN: souls0808](https://blog.csdn.net/chengzhenjia?type=blog)
+| 旧 (2017) | 新 (2.0) |
+|-----------|----------|
+| AGP 2.3 / Gradle 3.3 | AGP 8.5 / Gradle 8.7 |
+| Support Library | AndroidX + Material |
+| `ndk.moduleName` + Android.mk | CMake `externalNativeBuild` |
+| `armeabi` / `mips` / productFlavors | 现代 ABI filters |
+| 单一 `java2C()` | 17 个可交互知识点 |
+| BottomNavigation 模板壳 | 专注 NDK 的 Demo 列表 |
 
 ## License
 
-    Copyright 2016 cheng2016,Inc.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+Apache License 2.0 — 见原作者 Copyright 2016 cheng2016。
